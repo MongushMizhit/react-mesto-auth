@@ -43,6 +43,7 @@
 @import url(./blocks/popup-profile/__form/popup__form.css);
 @import url(./blocks/popup-profile/__form-avatar/popup__form-avatar.css);
 @import url(./blocks/popup-profile/__title/popup__title.css);
+@import url(./blocks/popup-profile/__title/_type/popup__title_type_delete_confirm.css);
 @import url(./blocks/popup-profile/__title-delete/popup__title-delete.css);
 @import url(./blocks/popup-profile/__title-avatar/popup__title-avatar.css);
 @import url(./blocks/popup-profile/__input/popup__input.css);
