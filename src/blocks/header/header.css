@@ -3,6 +3,8 @@
     max-width: 880px;
     border-bottom: 1px solid #545454;
     padding: 45px 0 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 @media screen and (max-width: 920px) {

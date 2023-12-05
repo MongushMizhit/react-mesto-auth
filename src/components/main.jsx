@@ -4,7 +4,7 @@ import Card from './card';
 
 function Main(props) {
   const currentUser = useContext(CurrentUserContext);
-
+    
   return (
     <main className="main">
       <section className="profile">

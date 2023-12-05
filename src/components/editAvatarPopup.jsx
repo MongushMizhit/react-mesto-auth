@@ -5,7 +5,7 @@ function EditAvatarPopup({ isOpen, onClose, onUpdateAvatar }) {
   const avatarRef = useRef();
 
   useEffect(() => {
-    avatarRef.current.value = ''; // Очищаем поле инпута при открытии формы
+    avatarRef.current.value = ''; 
   }, [isOpen]);
 
   const handleSubmit = (e) => {
