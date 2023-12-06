@@ -46,5 +46,4 @@ export const register = (email, password) => {
       },
     })
     .then(handleResponse)
-    .then((data) => data);
   };

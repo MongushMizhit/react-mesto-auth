@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { Route, Routes, useNavigate } from 'react-router-dom';
-import Login from './components/login'
-import ProtectedRoute from './components/protectedRoute';
-import Register from './components/register';
-import InfoTooltip from './components/infoTooltip';
-import { CurrentUserContext } from './contexts/CurrentUserContext';
-import { api } from './utils/Api';
-import * as authApi from "./utils/authApi";
-import './index.css'; 
-import Header from './components/header';
-import Main from './components/main';
-import Footer from './components/footer';
-import EditProfilePopup from './components/editProfilePopup';
-import AddPlacePopup from './components/addPlacePopup';
-import EditAvatarPopup from './components/editAvatarPopup';
-import DeletePopup from './components/deletePopup';
-import ImagePopup from './components/imagePopup';
+import Login from './login'
+import ProtectedRoute from './protectedRoute';
+import Register from './register';
+import InfoTooltip from './infoTooltip';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import { api } from '../utils/Api';
+import * as authApi from "../utils/authApi"; 
+import Header from './header';
+import Main from './main';
+import Footer from './footer';
+import EditProfilePopup from './editProfilePopup';
+import AddPlacePopup from './addPlacePopup';
+import EditAvatarPopup from './editAvatarPopup';
+import DeletePopup from './deletePopup';
+import ImagePopup from './imagePopup';
 
 function App() {
 
+  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
+  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
+  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
+  const [selectedDeleteCard, setSelectedDeleteCard] = useState(null);
+  const [isInfoTooltipPopup, setIsInfoTooltipPopup] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const [isSignIn, setIsSignIn] = useState(true);
   const [isProfileEmail, setIsProfileEmail] = useState('email');
+  const [cards, setCards] = useState([]);
 
   const auth = (jwt) => {
     return authApi.checkToken(jwt)
@@ -44,12 +51,25 @@ function App() {
     const jwt = localStorage.getItem('jwt');
     auth(jwt);
   }, []);
+
+  useEffect(() => {
+    
+    if (loggedIn) {
+      api.getInitialCards()
+        .then((data) => {
+          setCards(data);
+        })
+        .catch((error) => {
+          console.error('Ошибка при загрузке карточек:', error);
+        });
+    }
+  }, [loggedIn]);
  
   const handleLogin = ({ email, password }) => {
     authApi.login(email, password)
       .then((res) => {
-        if (res.jwt) {
-          setIsProfileEmail(res.data.email);
+        if (res) {
+          setIsProfileEmail(email);  
         }
         setLoggedIn(true);
         navigate("/");
@@ -96,6 +116,8 @@ const logOut = () => {
     }
   }, [loggedIn]);
 
+  
+
   const handleUpdateUser = (newUserData) => {
     // Отправляем данные пользователя на сервер
     api.updateProfileInfo(newUserData.name, newUserData.about)
@@ -124,17 +146,6 @@ const logOut = () => {
       });
   };
 
-  const [cards, setCards] = useState([]);
-
-  useEffect(() => {
-    api.getInitialCards()
-      .then((data) => {
-        setCards(data);
-      })
-      .catch((error) => {
-        console.error('Ошибка при загрузке карточек:', error);
-      });
-  }, []);
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -169,14 +180,6 @@ const logOut = () => {
         console.error('Ошибка при добавлении новой карточки:', error);
       });
   };
-
-  const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
-  const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
-  const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [isDeletePopupOpen, setDeletePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [selectedDeleteCard, setSelectedDeleteCard] = useState(null);
-  const [isInfoTooltipPopup, setIsInfoTooltipPopup] = useState(false);
   
   const handleEditAvatarClick = () => {
     setEditAvatarPopupOpen(true);

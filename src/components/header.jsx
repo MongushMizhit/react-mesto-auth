@@ -1,12 +1,9 @@
 import React from 'react';
 import headerImage from '../images/header-logo.svg';
-import { Link, Routes, Route, useLocation } from "react-router-dom";
+import { Link, Routes, Route } from "react-router-dom";
 
 function Header(props) {
   const { loggedIn, isProfileEmail, logOut } = props;
-  const location = useLocation();
-  const textLink = location.pathname === "/sign-in" ? "Регистрация" : "Войти";
-  const textBtn = loggedIn ? "Выйти" : textLink;
 
   return (
     <header className="header">
@@ -30,7 +27,7 @@ function Header(props) {
               <Link className='header__link' to="/sign-up">Регистрация</Link>
             }/> 
         </Routes>
-        {loggedIn && (<button className="header__link header__exit" onClick={logOut}>{textBtn}</button>)}
+        {loggedIn && (<button className="header__link header__exit" onClick={logOut}>Выйти</button>)}
       </div>
     </header>
   );
